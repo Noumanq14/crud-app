@@ -24,7 +24,6 @@
     import {reactive,ref} from "vue";
     import axios from "axios";
     import { useRouter } from "vue-router";
-    // import { useStore } from "vuex";
     import { UserStore } from "@/store/UserStore.js";
     export default {
         setup(){

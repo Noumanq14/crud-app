@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CompanyController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -21,3 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::controller(AuthController::class)->group(function (){
     Route::post('login','login');
 });
+
+Route::resource('companies',CompanyController::class)->middleware('auth:sanctum');

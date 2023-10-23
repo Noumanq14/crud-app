@@ -4,8 +4,10 @@ import home from "./pages/home.vue";
 import login from "./pages/login.vue";
 import register from "./pages/register.vue";
 import dashboard from "./pages/dashboard.vue";
-// import store from "./store";
+import company from "./pages/company/company.vue";
+import addNewCompany from "./pages/company/addNewCompany.vue";
 import { UserStore } from "@/store/UserStore.js";
+
 const routes = [
     {
         path: "/",
@@ -36,13 +38,28 @@ const routes = [
             requiresAuth: true
         }
     },
+    {
+        path: "/company",
+        name: "Company",
+        component: company,
+        meta: {
+            requiresAuth: true
+        }
+    },
+    {
+        path: "/addNewCompany",
+        name: "AddNewCompany",
+        component: addNewCompany,
+        meta: {
+            requiresAuth: true
+        }
+    },
 ];
 
 const router = createRouter({
     history: createWebHistory(),
     routes
 });
-
 
 router.beforeEach((to, from) => {
     const store = UserStore();
