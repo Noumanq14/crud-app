@@ -17,9 +17,9 @@
 <script>
     import { UserStore } from "@/store/UserStore.js";
     import { mapState } from "pinia";
-    export default({
+    export default{
         computed: {
             ...mapState(UserStore,['token'])
         }
-    });
+    }
 </script>

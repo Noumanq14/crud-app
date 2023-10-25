@@ -2,7 +2,6 @@ import { createWebHistory,createRouter } from "vue-router";
 
 import home from "./pages/home.vue";
 import login from "./pages/login.vue";
-import register from "./pages/register.vue";
 import dashboard from "./pages/dashboard.vue";
 import company from "./pages/company/company.vue";
 import addNewCompany from "./pages/company/addNewCompany.vue";
@@ -18,14 +17,6 @@ const routes = [
         path: "/login",
         name: "Login",
         component: login,
-        meta: {
-            requiresAuth: false
-        }
-    },
-    {
-        path: "/register",
-        name: "Register",
-        component: register,
         meta: {
             requiresAuth: false
         }

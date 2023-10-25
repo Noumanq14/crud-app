@@ -2,8 +2,8 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-sm-6 mt-4">
-                <div class="alert alert-danger" role="alert" v-if="error">
-                    {{ error }}
+                <div class="alert alert-danger" role="alert" v-for="error in errors" :key="error">
+                    <span v-for="err in error" :key="err">{{err}}</span>
                 </div>
                 <form @submit.prevent="addNewCompany" enctype="multipart/form-data">
                     <div class="form group">
@@ -44,7 +44,7 @@
 
             });
 
-            let error = ref('');
+            let errors = ref('');
             let file = ref('');
             const store = UserStore();
             let token = store.token;
@@ -67,18 +67,12 @@
                 data.append('email',form.email);
                 data.append('companyWebsite',form.companyWebsite);
                 data.append('file',file.value);
-                console.log(data);
 
                 await axios.post('/api/companies',data,config).then(res=>{
                     if (res.data.status == 1)
                         router.push({name: 'Company'});
                 }).catch(exception=>{
-                    if (exception.response.data.message.hasOwnProperty('name'))
-                        error.value = exception.response.data.message.name[0];
-                    else if(exception.response.data.message.hasOwnProperty('file'))
-                        error.value = 'The Company logo is required.';
-                    else
-                        error.value = exception.response.data.message;
+                        errors.value = exception.response.data.message;
                 });
             }
 
@@ -86,7 +80,7 @@
                 form,
                 onChange,
                 addNewCompany,
-                error
+                errors
             }
         }
 

@@ -24,7 +24,10 @@
                             <td>{{company.email}}</td>
                             <td><img v-bind:src="company.logo" width="100" height="100"></td>
                             <td>{{company.website}}</td>
-                            <td><button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#companyModal" @click="editCompany(company)">Edit</button></td>
+                            <td>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#companyModal" @click="editCompany(company)">Edit</button>
+                                <button type="button" class="btn btn-danger ms-2" @click="deleteCompany(company.id)">Delete</button>
+                            </td>
                         </tr>
                     </template>
                 </tbody>
@@ -38,6 +41,9 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                        <div class="alert alert-danger" role="alert" v-for="error in errors" :key="error">
+                            <span v-for="err in error" :key="err">{{err}}</span>
+                        </div>
                         <form @submit.prevent="updateCompany" enctype="multipart/form-data">
                             <div class="form group">
                                 <label for="companyName">Name:</label>
@@ -50,6 +56,7 @@
                             <div class="form group">
                                 <label for="companylogo">Logo:</label>
                                 <input type="file" class="form-control" id="companylogo" @change="onChange">
+                                <img v-bind:src="companyLogo" v-if="companyLogo != ''" width="100" height="100" class="mt-2">
                             </div>
                             <div class="form group">
                                 <label for="companyWebsite">Website:</label>
@@ -76,10 +83,14 @@
             let token = store.token;
             let file = ref('');
             let companyId = ref('');
+            let errors = ref('');
+            let companyLogo = ref('');
+
             const form = reactive({
                 companyName: '',
                 email: '',
                 companyWebsite: '',
+                logo:''
             });
 
             const config = {
@@ -109,6 +120,20 @@
                 form.email = company.email;
                 form.companyWebsite = company.website;
                 companyId.value = company.id;
+                if (company.logo != "")
+                {
+                    companyLogo.value = company.logo
+                    form.logo = company.logo
+                }
+            }
+
+            const deleteCompany = async (companyId) => {
+                await axios.delete('/api/companies/'+companyId,config).then(res=>{
+                    if (res.data.status == 1)
+                        getCompanies();
+                }).catch(exception=>{
+                    alert(exception.response.data.message);
+                });
             }
 
             const updateCompany = async () => {
@@ -118,22 +143,17 @@
                 data.append('email',form.email);
                 data.append('companyWebsite',form.companyWebsite);
                 data.append('file',file.value);
+                data.append('logo',form.logo);
                 data.append('_method','PATCH');
 
                 await axios.post('/api/companies/'+companyId.value,data,config).then(res=>{
                     if (res.data.status == 1)
                     {
-                        console.log(res);
-                        // getCompanies();
-                        // $("#companyModal").modal('hide');
+                        getCompanies();
+                        $("#companyModal .btn-close").trigger("click");
                     }
                 }).catch(exception=>{
-                    // if (exception.response.data.message.hasOwnProperty('name'))
-                    //     error.value = exception.response.data.message.name[0];
-                    // else if(exception.response.data.message.hasOwnProperty('file'))
-                    //     error.value = 'The Company logo is required.';
-                    // else
-                    //     error.value = exception.response.data.message;
+                    errors.value = exception.response.data.message;
                 });
 
             }
@@ -146,7 +166,10 @@
                 editCompany,
                 form,
                 onChange,
-                updateCompany
+                updateCompany,
+                errors,
+                companyLogo,
+                deleteCompany
             }
         }
     }
