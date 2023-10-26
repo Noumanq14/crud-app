@@ -5,10 +5,12 @@ export const UserStore = defineStore({
 
     state: () => ({
         token: localStorage.getItem('token') || null,
+        userName: localStorage.getItem('userName') || null
     }),
 
     getters: {
-        getToken: state => state.token
+        getToken: state => state.token,
+        getUserName: state => state.userName
     },
 
     actions: {
@@ -19,6 +21,14 @@ export const UserStore = defineStore({
         removeToken: function (){
             this.token = null;
             localStorage.removeItem('token');
+        },
+        setUserName: function (userName){
+            this.userName = userName;
+            localStorage.setItem('userName',userName);
+        },
+        removeUserName: function (){
+            this.userName = null;
+            localStorage.removeItem('userName');
         }
     }
 });

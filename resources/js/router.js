@@ -6,6 +6,8 @@ import dashboard from "./pages/dashboard.vue";
 import company from "./pages/company/company.vue";
 import addNewCompany from "./pages/company/addNewCompany.vue";
 import { UserStore } from "@/store/UserStore.js";
+import employee from "./pages/employee/employee.vue";
+import addNewEmployee from "./pages/employee/addNewEmployee.vue";
 
 const routes = [
     {
@@ -41,6 +43,22 @@ const routes = [
         path: "/addNewCompany",
         name: "AddNewCompany",
         component: addNewCompany,
+        meta: {
+            requiresAuth: true
+        }
+    },
+    {
+        path: "/employee",
+        name: "Employee",
+        component: employee,
+        meta: {
+            requiresAuth: true
+        }
+    },
+    {
+        path: "/addNewEmployee",
+        name: "AddNewEmployee",
+        component: addNewEmployee,
         meta: {
             requiresAuth: true
         }

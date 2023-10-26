@@ -41,6 +41,7 @@
                     if (res.data.status == 1)
                     {
                         store.setToken(res.data.data.token);
+                        store.setUserName(res.data.data.userName);
                         router.push({name: 'Dashboard'});
                     }
                 }).catch(exception=>{
